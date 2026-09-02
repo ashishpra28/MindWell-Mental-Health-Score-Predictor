@@ -3,7 +3,7 @@ from typing import TypedDict, Annotated, Literal
 from pydantic import BaseModel
 
 from langchain_groq import ChatGroq
-from langchain_core.messages import BaseMessage, SystemMessage, HumanMessage
+from langchain_core.messages import BaseMessage, SystemMessage, HumanMessage, AIMessage
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from langgraph.checkpoint.memory import InMemorySaver
@@ -259,14 +259,17 @@ def generate_guidance(state: ChatState):
     ]
 
     # Generate final response
-    response = llm.invoke(prompt)
+    response = llm.stream(prompt)
+    full_response = ""
 
     # Return final state update
-    return {
-        "response": response.content,
-        "messages": [response]
-    }
+    for chunk in response:
+        full_response += chunk.content
 
+    return {
+        "response": full_response,
+        "messages": [AIMessage(content=full_response)]
+    }
 
 # Define graph
 graph = StateGraph(ChatState)
@@ -295,26 +298,3 @@ checkpoint = InMemorySaver()
 
 # Compile graph
 workflow = graph.compile(checkpointer=checkpoint)
-
-
-result = workflow.invoke({
-    "messages": [
-        HumanMessage(content="How can I improve my mental health score?")
-    ],
-    "mental_health_score": 6.2,
-    "user_data": {
-        "Age": 21,
-        "Sleep_Hours_Per_Night": 7.5,
-        "Study_Hours": 5.0,
-        "Physical_Activity_Hours": 2.0,
-        "Avg_Daily_Usage_Hours": 4.0,
-        "Daily_Unlocks": 120,
-        "Stress_Level": "Medium"
-    },
-    "question_category": "",
-    "score_analysis": "",
-    "advisor_context": "",
-    "response": ""
-},config={"configurable":{'thread_id':1}})
-
-print(result)

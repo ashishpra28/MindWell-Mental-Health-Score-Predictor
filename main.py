@@ -1,11 +1,14 @@
 # Import Libraries 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field 
 from typing import Annotated, Literal 
 import pandas as pd 
 import joblib 
 
+from langchain_core.messages import HumanMessage 
+from graph import workflow
 
 # Load model 
 model = joblib.load('artifacts/model.pkl')
@@ -79,3 +82,31 @@ def predict(data: UserInput):
     prediction = model.predict(input_df)[0]
 
     return {"predicted_mental_health_score": round(float(prediction),2)}
+
+
+# Create pydantic model to validate Agent input data
+class ChatRequest(BaseModel):
+    messages: str
+    mental_health_score: float
+    user_data: dict
+    thread_id: str = "1"
+
+# Create chat endpoint 
+@app.post("/chat")
+def chat(data: ChatRequest):
+
+    def generate():
+            for chunk, metadata in workflow.stream({
+                "messages"                   :[HumanMessage(content=data.messages)],
+                "mental_health_score"        : data.mental_health_score,
+                "user_data"                  : data.user_data,
+                "question_category"          : "general advice",
+                "score_analysis"             : "",
+                "advisor_context"            : "",
+                "response"                   : ""
+                },
+                config={"configurable":{'thread_id':data.thread_id}},stream_mode="messages"):
+                            if chunk.content:
+                                yield chunk.content
+
+    return StreamingResponse(generate(), media_type="text/plain")
