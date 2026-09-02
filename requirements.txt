@@ -9,3 +9,10 @@ xgboost
 uvicorn
 fastapi
 pydantic
+
+langchain
+langchain-core
+langchain-community
+langchain-groq
+langchain-huggingface
+langgraph

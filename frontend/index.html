@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindWell — Mental Health Predictor</title>
+<meta name="description" content="MindWell estimates a student's mental health score from behavioral and lifestyle data using a trained machine learning model.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grid-field" aria-hidden="true"></div>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar" id="top">
+  <div class="navbar__inner">
+    <a href="#top" class="wordmark">MindWell</a>
+    <nav class="navbar__links" aria-label="Primary">
+      <a href="#predict">Predict</a>
+      <a href="#how-it-works">How it Works</a>
+      <a href="#about">About</a>
+    </nav>
+    <span class="badge">ML powered</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero__text">
+      <p class="hero__kicker">Mental Health Predictor</p>
+      <h1 class="hero__title">Understand the patterns<br>behind your daily habits.</h1>
+      <p class="hero__desc">
+        MindWell estimates a student's mental health score from behavioral and
+        lifestyle factors — screen time, sleep, study load, and stress — using
+        a model trained on real usage data.
+      </p>
+      <div class="hero__actions">
+        <a href="#predict" class="btn btn--primary">Check your score</a>
+        <a href="#how-it-works" class="btn btn--ghost">How it works</a>
+      </div>
+    </div>
+
+    <div class="hero__visual" aria-hidden="true">
+      <svg viewBox="0 0 420 300" class="hero__graph">
+        <!-- baseline grid -->
+        <g class="graph-grid">
+          <line x1="0" y1="60" x2="420" y2="60"></line>
+          <line x1="0" y1="120" x2="420" y2="120"></line>
+          <line x1="0" y1="180" x2="420" y2="180"></line>
+          <line x1="0" y1="240" x2="420" y2="240"></line>
+          <circle class="graph-live-dot" r="4"></circle>  
+        </g>
+        <path class="graph-line" d="M0,210 L60,190 L120,150 L180,165 L240,110 L300,125 L360,80 L420,95"></path>
+        <g class="graph-points">
+          <circle cx="0" cy="210" r="3"></circle>
+          <circle cx="60" cy="190" r="3"></circle>
+          <circle cx="120" cy="150" r="3"></circle>
+          <circle cx="180" cy="165" r="3"></circle>
+          <circle cx="240" cy="110" r="3"></circle>
+          <circle cx="300" cy="125" r="3"></circle>
+          <circle cx="360" cy="80" r="3"></circle>
+          <circle cx="420" cy="95" r="4" class="graph-point--live"></circle>
+        </g>
+      </svg>
+      <!-- <div class="hero__stat">
+        <span class="hero__stat-value">6.4</span>
+        <span class="hero__stat-label"></span>
+      </div> -->
+    </div>
+  </section>
+
+  <!-- ============ PREDICTION FORM ============ -->
+  <section class="predict" id="predict">
+    <div class="section-head">
+      <h2>Check Your Mental Health Score</h2>
+      <p>Enter your lifestyle and behavioral information to generate a prediction.</p>
+    </div>
+
+    <form id="predict-form" class="form" novalidate>
+
+      <fieldset class="form__group">
+        <legend>Personal Information</legend>
+        <div class="form__row">
+
+          <div class="field">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="Age" min="10" max="120" step="1" required>
+            <span class="field__error" data-error-for="age"></span>
+          </div>
+
+          <div class="field">
+            <label for="gender">Gender</label>
+            <select id="gender" name="Gender" required>
+              <option value="" disabled selected>Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            <span class="field__error" data-error-for="gender"></span>
+          </div>
+
+          <div class="field">
+            <label for="country">Country</label>
+            <select id="country" name="Country" required>
+              <option value="" disabled selected>Select</option>
+            </select>
+            <span class="field__error" data-error-for="country"></span>
+          </div>
+
+          <div class="field">
+            <label for="academic-level">Academic Level</label>
+            <select id="academic-level" name="Academic_Level" required>
+              <option value="" disabled selected>Select</option>
+              <option value="High School">High School</option>
+              <option value="Undergraduate">Undergraduate</option>
+              <option value="Graduate">Graduate</option>
+            </select>
+            <span class="field__error" data-error-for="academic-level"></span>
+          </div>
+
+        </div>
+      </fieldset>
+
+      <fieldset class="form__group">
+        <legend>Digital Habits</legend>
+        <div class="form__row">
+
+          <div class="field">
+            <label for="platform">Most Used Platform</label>
+            <select id="platform" name="Most_Used_Platform" required>
+              <option value="" disabled selected>Select</option>
+              <option value="Instagram">Instagram</option>
+              <option value="YouTube">YouTube</option>
+              <option value="TikTok">TikTok</option>
+              <option value="Facebook">Facebook</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Snapchat">Snapchat</option>
+              <option value="Twitter">Twitter</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="WeChat">WeChat</option>
+              <option value="LINE">LINE</option>
+              <option value="KakaoTalk">KakaoTalk</option>
+              <option value="VKontakte">VKontakte</option>
+            </select>
+            <span class="field__error" data-error-for="platform"></span>
+          </div>
+
+          <div class="field">
+            <label for="purpose">Purpose Of Use</label>
+            <select id="purpose" name="Purpose_Of_Use" required>
+              <option value="" disabled selected>Select</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Education">Education</option>
+              <option value="Networking">Networking</option>
+              <option value="News">News</option>
+            </select>
+            <span class="field__error" data-error-for="purpose"></span>
+          </div>
+
+          <div class="field">
+            <label for="usage-hours">Avg. Daily Screen Time (hours)</label>
+            <input type="number" id="usage-hours" name="Avg_Daily_Usage_Hours" min="1" max="24" step="0.1" required>
+            <span class="field__error" data-error-for="usage-hours"></span>
+          </div>
+
+          <div class="field">
+            <label for="unlocks">Daily Phone Unlocks</label>
+            <input type="number" id="unlocks" name="Daily_Unlocks" min="1" step="1" required>
+            <span class="field__hint">How many times you unlock your phone per day</span>
+            <span class="field__error" data-error-for="unlocks"></span>
+          </div>
+
+        </div>
+      </fieldset>
+
+      <fieldset class="form__group">
+        <legend>Lifestyle</legend>
+        <div class="form__row">
+
+          <div class="field">
+            <label for="study-hours">Study Hours (hours/day)</label>
+            <input type="number" id="study-hours" name="Study_Hours" min="0" max="24" step="0.1" required>
+            <span class="field__error" data-error-for="study-hours"></span>
+          </div>
+
+          <div class="field">
+            <label for="activity-hours">Physical Activity (hours/day)</label>
+            <input type="number" id="activity-hours" name="Physical_Activity_Hours" min="0" max="10" step="0.1" required>
+            <span class="field__error" data-error-for="activity-hours"></span>
+          </div>
+
+          <div class="field">
+            <label for="sleep-hours">Sleep Per Night (hours)</label>
+            <input type="number" id="sleep-hours" name="Sleep_Hours_Per_Night" min="0" max="24" step="0.1" required>
+            <span class="field__error" data-error-for="sleep-hours"></span>
+          </div>
+
+          <div class="field">
+            <label for="stress">Stress Level</label>
+            <select id="stress" name="Stress_Level" required>
+              <option value="" disabled selected>Select</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Very High">Very High</option>
+            </select>
+            <span class="field__error" data-error-for="stress"></span>
+          </div>
+
+        </div>
+      </fieldset>
+
+      <div class="form__submit">
+        <p class="form__api-error" id="api-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn--primary btn--large" id="submit-btn">
+          <span class="btn__label">Get Score</span>
+          <span class="btn__arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+  <!-- ============ RESULT ============ -->
+  <section class="result" id="result" hidden>
+    <div class="result__inner">
+      <p class="result__kicker">Your Predicted Mental Health Score</p>
+
+      <div class="result__scale">
+        <svg viewBox="0 0 240 240" class="score-ring">
+          <circle class="score-ring__track" cx="120" cy="120" r="104"></circle>
+          <circle class="score-ring__fill" cx="120" cy="120" r="104"></circle>
+        </svg>
+        <div class="result__score">
+          <span class="result__number" id="score-value">0.0</span>
+          <span class="result__denominator">/ 10</span>
+        </div>
+      </div>
+
+      <p class="result__band" id="score-band"></p>
+
+      <div class="result__disclaimer">
+        This prediction is for educational purposes only and is not a medical diagnosis.
+      </div>
+
+      <button type="button" class="btn btn--ghost" id="reset-btn">Run another prediction</button>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="how" id="how-it-works">
+    <div class="section-head">
+      <h2>How it works</h2>
+    </div>
+    <ol class="how__steps">
+      <li class="how__step">
+        <span class="how__index">01</span>
+        <h3>Enter your information</h3>
+        <p>Fill in your digital habits and lifestyle details in the form above.</p>
+      </li>
+      <li class="how__step">
+        <span class="how__index">02</span>
+        <h3>MindWell processes your data</h3>
+        <p>The trained model weighs each factor against patterns learned from real usage data.</p>
+      </li>
+      <li class="how__step">
+        <span class="how__index">03</span>
+        <h3>Receive your predicted score</h3>
+        <p>Your estimated score appears instantly, with a plain-language interpretation.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="about" id="about">
+    <div class="section-head">
+      <h2>About MindWell</h2>
+      <p>
+        MindWell is a machine learning model that estimates a student's mental
+        health score from behavioral and lifestyle inputs — screen time, sleep,
+        study hours, physical activity, and self-reported stress. It's built to
+        surface patterns in daily habits, not to replace professional judgment.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer__inner">
+    <span class="wordmark wordmark--small">MindWell</span>
+    <p class="footer__note">Predictions are estimates from a machine learning model and are not medical advice.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
