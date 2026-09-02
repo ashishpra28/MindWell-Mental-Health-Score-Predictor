@@ -96,17 +96,25 @@ class ChatRequest(BaseModel):
 def chat(data: ChatRequest):
 
     def generate():
-            for chunk, metadata in workflow.stream({
-                "messages"                   :[HumanMessage(content=data.messages)],
-                "mental_health_score"        : data.mental_health_score,
-                "user_data"                  : data.user_data,
-                "question_category"          : "general advice",
-                "score_analysis"             : "",
-                "advisor_context"            : "",
-                "response"                   : ""
-                },
-                config={"configurable":{'thread_id':data.thread_id}},stream_mode="messages"):
-                            if chunk.content:
-                                yield chunk.content
+           for chunk, metadata in workflow.stream(
+                    {
+                        "messages": [HumanMessage(content=data.messages)],
+                        "mental_health_score": data.mental_health_score,
+                        "user_data": data.user_data,
+                        "question_category": "general advice",
+                        "score_analysis": "",
+                        "advisor_context": "",
+                        "response": ""
+                    },
+                    config={
+                        "configurable": {
+                            "thread_id": data.thread_id
+                        }
+                    },
+                    stream_mode="messages"
+                ):
+                    if metadata.get("langgraph_node") == "generate_guidance":
+                        if chunk.content:
+                            yield chunk.content
 
     return StreamingResponse(generate(), media_type="text/plain")

@@ -55,7 +55,6 @@
           <line x1="0" y1="120" x2="420" y2="120"></line>
           <line x1="0" y1="180" x2="420" y2="180"></line>
           <line x1="0" y1="240" x2="420" y2="240"></line>
-          <circle class="graph-live-dot" r="4"></circle>  
         </g>
         <path class="graph-line" d="M0,210 L60,190 L120,150 L180,165 L240,110 L300,125 L360,80 L420,95"></path>
         <g class="graph-points">
@@ -68,11 +67,12 @@
           <circle cx="360" cy="80" r="3"></circle>
           <circle cx="420" cy="95" r="4" class="graph-point--live"></circle>
         </g>
+        <circle class="graph-live-dot" r="4"></circle>
       </svg>
-      <!-- <div class="hero__stat">
+      <div class="hero__stat">
         <span class="hero__stat-value">6.4</span>
-        <span class="hero__stat-label"></span>
-      </div> -->
+        <span class="hero__stat-label">sample predicted score</span>
+      </div>
     </div>
   </section>
 
@@ -86,7 +86,7 @@
     <form id="predict-form" class="form" novalidate>
 
       <fieldset class="form__group">
-        <legend>Personal Information</legend>
+        <legend>Personal information</legend>
         <div class="form__row">
 
           <div class="field">
@@ -114,7 +114,7 @@
           </div>
 
           <div class="field">
-            <label for="academic-level">Academic Level</label>
+            <label for="academic-level">Academic level</label>
             <select id="academic-level" name="Academic_Level" required>
               <option value="" disabled selected>Select</option>
               <option value="High School">High School</option>
@@ -128,11 +128,11 @@
       </fieldset>
 
       <fieldset class="form__group">
-        <legend>Digital Habits</legend>
+        <legend>Digital habits</legend>
         <div class="form__row">
 
           <div class="field">
-            <label for="platform">Most Used Platform</label>
+            <label for="platform">Most used platform</label>
             <select id="platform" name="Most_Used_Platform" required>
               <option value="" disabled selected>Select</option>
               <option value="Instagram">Instagram</option>
@@ -152,7 +152,7 @@
           </div>
 
           <div class="field">
-            <label for="purpose">Purpose Of Use</label>
+            <label for="purpose">Purpose of use</label>
             <select id="purpose" name="Purpose_Of_Use" required>
               <option value="" disabled selected>Select</option>
               <option value="Entertainment">Entertainment</option>
@@ -164,13 +164,13 @@
           </div>
 
           <div class="field">
-            <label for="usage-hours">Avg. Daily Screen Time (hours)</label>
+            <label for="usage-hours">Avg. daily usage (hours)</label>
             <input type="number" id="usage-hours" name="Avg_Daily_Usage_Hours" min="1" max="24" step="0.1" required>
             <span class="field__error" data-error-for="usage-hours"></span>
           </div>
 
           <div class="field">
-            <label for="unlocks">Daily Phone Unlocks</label>
+            <label for="unlocks">Daily unlocks</label>
             <input type="number" id="unlocks" name="Daily_Unlocks" min="1" step="1" required>
             <span class="field__hint">How many times you unlock your phone per day</span>
             <span class="field__error" data-error-for="unlocks"></span>
@@ -184,25 +184,25 @@
         <div class="form__row">
 
           <div class="field">
-            <label for="study-hours">Study Hours (hours/day)</label>
+            <label for="study-hours">Study hours per day</label>
             <input type="number" id="study-hours" name="Study_Hours" min="0" max="24" step="0.1" required>
             <span class="field__error" data-error-for="study-hours"></span>
           </div>
 
           <div class="field">
-            <label for="activity-hours">Physical Activity (hours/day)</label>
+            <label for="activity-hours">Physical activity (hours/day)</label>
             <input type="number" id="activity-hours" name="Physical_Activity_Hours" min="0" max="10" step="0.1" required>
             <span class="field__error" data-error-for="activity-hours"></span>
           </div>
 
           <div class="field">
-            <label for="sleep-hours">Sleep Per Night (hours)</label>
+            <label for="sleep-hours">Sleep per night (hours)</label>
             <input type="number" id="sleep-hours" name="Sleep_Hours_Per_Night" min="0" max="24" step="0.1" required>
             <span class="field__error" data-error-for="sleep-hours"></span>
           </div>
 
           <div class="field">
-            <label for="stress">Stress Level</label>
+            <label for="stress">Stress level</label>
             <select id="stress" name="Stress_Level" required>
               <option value="" disabled selected>Select</option>
               <option value="Low">Low</option>
@@ -219,7 +219,7 @@
       <div class="form__submit">
         <p class="form__api-error" id="api-error" role="alert" hidden></p>
         <button type="submit" class="btn btn--primary btn--large" id="submit-btn">
-          <span class="btn__label">Get Score</span>
+          <span class="btn__label">Predict My Score</span>
           <span class="btn__arrow" aria-hidden="true">→</span>
         </button>
       </div>
@@ -230,7 +230,7 @@
   <!-- ============ RESULT ============ -->
   <section class="result" id="result" hidden>
     <div class="result__inner">
-      <p class="result__kicker">Your Predicted Mental Health Score</p>
+      <p class="result__kicker">Your predicted mental health score</p>
 
       <div class="result__scale">
         <svg viewBox="0 0 240 240" class="score-ring">
@@ -299,6 +299,40 @@
     <p class="footer__note">Predictions are estimates from a machine learning model and are not medical advice.</p>
   </div>
 </footer>
+
+<!-- ============ CHAT WIDGET ============ -->
+<div class="chat-widget">
+  <div class="chat-hint" id="chat-hint" aria-hidden="true">
+    <span class="chat-hint__label">ask me anything</span>
+    <svg class="chat-hint__arrow" viewBox="0 0 40 40">
+      <path d="M4 4 C 4 24, 20 30, 32 33" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M25 29 L32 33 L29 39" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <button type="button" class="chat-launcher" id="chat-launcher" aria-expanded="false" aria-controls="chat-panel">
+    <span class="chat-launcher__dot" aria-hidden="true"></span>
+    Ask MindWell
+  </button>
+
+  <section class="chat-panel" id="chat-panel" hidden>
+    <header class="chat-panel__header">
+      <span>MindWell Advisor</span>
+      <button type="button" class="chat-panel__close" id="chat-close" aria-label="Close chat">×</button>
+    </header>
+
+    <div class="chat-panel__messages" id="chat-messages">
+      <div class="chat-msg chat-msg--bot">
+        Run a prediction first, then ask me anything about your score — what it means and what you could try.
+      </div>
+    </div>
+
+    <form class="chat-panel__form" id="chat-form">
+      <input type="text" id="chat-input" placeholder="Run a prediction to unlock chat" autocomplete="off" disabled required>
+      <button type="submit" class="btn btn--primary" id="chat-send" disabled>Send</button>
+    </form>
+  </section>
+</div>
 
 <script src="script.js"></script>
 </body>

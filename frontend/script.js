@@ -32,6 +32,8 @@ const NUMERIC_FIELDS = new Set([
   "Study_Hours", "Physical_Activity_Hours", "Sleep_Hours_Per_Night"
 ]);
 
+const CHAT_API_URL = "http://127.0.0.1:8000/chat";
+
 const form = document.getElementById("predict-form");
 const submitBtn = document.getElementById("submit-btn");
 const apiErrorBox = document.getElementById("api-error");
@@ -41,13 +43,27 @@ const scoreBandEl = document.getElementById("score-band");
 const scoreRingFill = document.querySelector(".score-ring__fill");
 const resetBtn = document.getElementById("reset-btn");
 
+const chatLauncher = document.getElementById("chat-launcher");
+const chatHint = document.getElementById("chat-hint");
+const chatPanel = document.getElementById("chat-panel");
+const chatClose = document.getElementById("chat-close");
+const chatMessages = document.getElementById("chat-messages");
+const chatForm = document.getElementById("chat-form");
+const chatInput = document.getElementById("chat-input");
+const chatSendBtn = document.getElementById("chat-send");
+
 const RING_CIRCUMFERENCE = 2 * Math.PI * 104;
+const THREAD_ID = generateThreadId();
+
+let lastUserData = null;
+let lastScore = null;
 
 init();
 
 function init() {
   populateCountries();
   observeFormGroups();
+  initChat();
 
   form.addEventListener("submit", handleSubmit);
   resetBtn.addEventListener("click", handleReset);
@@ -153,7 +169,7 @@ async function handleSubmit(event) {
 
   try {
     const score = await predictScore(data);
-    displayResult(score);
+    displayResult(score, data);
   } catch (err) {
     showError(err.message);
   } finally {
@@ -210,7 +226,7 @@ async function predictScore(data) {
 /* Result display                                                          */
 /* ---------------------------------------------------------------------- */
 
-function displayResult(score) {
+function displayResult(score, data) {
   resultSection.hidden = false;
   scoreBandEl.textContent = interpretScore(score);
 
@@ -218,6 +234,10 @@ function displayResult(score) {
 
   animateScore(score);
   animateRing(score);
+
+  lastUserData = data;
+  lastScore = score;
+  enableChat();
 }
 
 function interpretScore(score) {
@@ -284,4 +304,110 @@ function showError(message) {
 function hideApiError() {
   apiErrorBox.hidden = true;
   apiErrorBox.textContent = "";
+}
+
+/* ---------------------------------------------------------------------- */
+/* Chat widget                                                             */
+/* ---------------------------------------------------------------------- */
+
+function generateThreadId() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return `thread-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function initChat() {
+  chatLauncher.addEventListener("click", () => {
+    dismissChatHint();
+    toggleChatPanel(true);
+  });
+  chatClose.addEventListener("click", () => toggleChatPanel(false));
+  chatForm.addEventListener("submit", handleChatSubmit);
+}
+
+function dismissChatHint() {
+  if (chatHint) chatHint.classList.add("is-dismissed");
+}
+
+function toggleChatPanel(open) {
+  chatPanel.hidden = !open;
+  chatLauncher.setAttribute("aria-expanded", String(open));
+  if (open) chatInput.focus();
+}
+
+// Called once a prediction exists — unlocks the input.
+function enableChat() {
+  chatInput.disabled = false;
+  chatSendBtn.disabled = false;
+  chatInput.placeholder = "Ask about your score…";
+}
+
+async function handleChatSubmit(event) {
+  event.preventDefault();
+
+  const question = chatInput.value.trim();
+  if (!question || lastScore === null || !lastUserData) return;
+
+  appendChatMessage(question, "user");
+  chatInput.value = "";
+  setChatLoadingState(true);
+
+  const botBubble = appendChatMessage("", "bot");
+
+  try {
+    await streamChatReply(question, botBubble);
+  } catch (err) {
+    botBubble.remove();
+    appendChatMessage(
+      "Unable to reach MindWell chat. Please make sure the prediction server is running.",
+      "error"
+    );
+  } finally {
+    setChatLoadingState(false);
+  }
+}
+
+async function streamChatReply(question, botBubble) {
+  const response = await fetch(CHAT_API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messages: question,
+      mental_health_score: lastScore,
+      user_data: lastUserData,
+      thread_id: THREAD_ID
+    })
+  });
+
+  if (!response.ok || !response.body) {
+    throw new Error("Chat request failed.");
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let text = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    text += decoder.decode(value, { stream: true });
+    botBubble.textContent = text;
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  if (!text) botBubble.textContent = "I don't have a response for that right now.";
+}
+
+function appendChatMessage(text, role) {
+  const bubble = document.createElement("div");
+  bubble.className = `chat-msg chat-msg--${role}`;
+  bubble.textContent = text;
+  chatMessages.appendChild(bubble);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return bubble;
+}
+
+function setChatLoadingState(isLoading) {
+  chatSendBtn.disabled = isLoading;
+  chatInput.disabled = isLoading;
 }
