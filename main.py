@@ -8,7 +8,7 @@ import pandas as pd
 import joblib 
 
 from langchain_core.messages import HumanMessage 
-from graph import workflow
+from agent import workflow
 
 # Load model 
 model = joblib.load('artifacts/model.pkl')
