@@ -70,11 +70,12 @@ function init() {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Setup                                                                   */
+/* Setup                                                                  */
 /* ---------------------------------------------------------------------- */
 
 function populateCountries() {
   const select = document.getElementById("country");
+
   for (const country of COUNTRIES) {
     const option = document.createElement("option");
     option.value = country;
@@ -108,7 +109,7 @@ function observeFormGroups() {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Form handling                                                           */
+/* Form handling                                                          */
 /* ---------------------------------------------------------------------- */
 
 function getFormData() {
@@ -129,7 +130,12 @@ function validateForm(data) {
     const value = data[field.name];
     const errorSlotId = field.id;
 
-    if (value === "" || value === undefined || value === null || Number.isNaN(value)) {
+    if (
+      value === "" ||
+      value === undefined ||
+      value === null ||
+      Number.isNaN(value)
+    ) {
       errors[errorSlotId] = "This field is required.";
       continue;
     }
@@ -137,8 +143,14 @@ function validateForm(data) {
     if (field.type === "number") {
       const min = field.min !== "" ? Number(field.min) : null;
       const max = field.max !== "" ? Number(field.max) : null;
-      if (min !== null && value < min) errors[errorSlotId] = `Must be at least ${min}.`;
-      if (max !== null && value > max) errors[errorSlotId] = `Must be at most ${max}.`;
+
+      if (min !== null && value < min) {
+        errors[errorSlotId] = `Must be at least ${min}.`;
+      }
+
+      if (max !== null && value > max) {
+        errors[errorSlotId] = `Must be at most ${max}.`;
+      }
     }
   }
 
@@ -150,9 +162,11 @@ function renderFieldErrors(errors) {
   document.querySelectorAll(".field").forEach((fieldEl) => {
     const input = fieldEl.querySelector("[name]");
     const errorSlot = fieldEl.querySelector(".field__error");
+
     if (!input || !errorSlot) return;
 
     const message = errors[input.id];
+
     errorSlot.textContent = message || "";
     fieldEl.classList.toggle("has-error", Boolean(message));
   });
@@ -163,6 +177,7 @@ async function handleSubmit(event) {
   hideApiError();
 
   const data = getFormData();
+
   if (!validateForm(data)) return;
 
   setLoadingState(true);
@@ -180,11 +195,14 @@ async function handleSubmit(event) {
 function handleReset() {
   resultSection.hidden = true;
   form.reset();
-  document.getElementById("predict").scrollIntoView({ behavior: "smooth" });
+
+  document.getElementById("predict").scrollIntoView({
+    behavior: "smooth"
+  });
 }
 
 /* ---------------------------------------------------------------------- */
-/* API                                                                      */
+/* API                                                                    */
 /* ---------------------------------------------------------------------- */
 
 async function predictScore(data) {
@@ -209,34 +227,45 @@ async function predictScore(data) {
   }
 
   let payload;
+
   try {
     payload = await response.json();
   } catch {
-    throw new Error("MindWell returned an unexpected response. Please try again.");
+    throw new Error(
+      "MindWell returned an unexpected response. Please try again."
+    );
   }
 
   if (typeof payload.predicted_mental_health_score !== "number") {
-    throw new Error("MindWell returned an unexpected response. Please try again.");
+    throw new Error(
+      "MindWell returned an unexpected response. Please try again."
+    );
   }
 
   return payload.predicted_mental_health_score;
 }
 
 /* ---------------------------------------------------------------------- */
-/* Result display                                                          */
+/* Result display                                                         */
 /* ---------------------------------------------------------------------- */
 
 function displayResult(score, data) {
   resultSection.hidden = false;
   scoreBandEl.textContent = interpretScore(score);
 
-  resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  resultSection.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 
   animateScore(score);
   animateRing(score);
 
   lastUserData = data;
-  lastScore = score;
+
+  // Keep chatbot score same as UI.
+  lastScore = Number(score.toFixed(1));
+
   enableChat();
 }
 
@@ -248,7 +277,9 @@ function interpretScore(score) {
 }
 
 function animateScore(target) {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
   if (reduceMotion) {
     scoreValueEl.textContent = target.toFixed(1);
@@ -261,10 +292,14 @@ function animateScore(target) {
   function tick(now) {
     const progress = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
+
     scoreValueEl.textContent = (target * eased).toFixed(1);
 
-    if (progress < 1) requestAnimationFrame(tick);
-    else scoreValueEl.textContent = target.toFixed(1);
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      scoreValueEl.textContent = target.toFixed(1);
+    }
   }
 
   requestAnimationFrame(tick);
@@ -285,11 +320,12 @@ function animateRing(score) {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Loading + error states                                                  */
+/* Loading + error states                                                 */
 /* ---------------------------------------------------------------------- */
 
 function setLoadingState(isLoading) {
   submitBtn.disabled = isLoading;
+
   submitBtn.querySelector(".btn__label").textContent = isLoading
     ? "Predicting…"
     : "Predict My Score";
@@ -298,7 +334,11 @@ function setLoadingState(isLoading) {
 function showError(message) {
   apiErrorBox.textContent = message;
   apiErrorBox.hidden = false;
-  apiErrorBox.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  apiErrorBox.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
 }
 
 function hideApiError() {
@@ -307,11 +347,14 @@ function hideApiError() {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Chat widget                                                             */
+/* Chat widget                                                            */
 /* ---------------------------------------------------------------------- */
 
 function generateThreadId() {
-  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  if (window.crypto && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+
   return `thread-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
@@ -320,18 +363,25 @@ function initChat() {
     dismissChatHint();
     toggleChatPanel(true);
   });
+
   chatClose.addEventListener("click", () => toggleChatPanel(false));
+
   chatForm.addEventListener("submit", handleChatSubmit);
 }
 
 function dismissChatHint() {
-  if (chatHint) chatHint.classList.add("is-dismissed");
+  if (chatHint) {
+    chatHint.classList.add("is-dismissed");
+  }
 }
 
 function toggleChatPanel(open) {
   chatPanel.hidden = !open;
   chatLauncher.setAttribute("aria-expanded", String(open));
-  if (open) chatInput.focus();
+
+  if (open) {
+    chatInput.focus();
+  }
 }
 
 // Called once a prediction exists — unlocks the input.
@@ -345,10 +395,13 @@ async function handleChatSubmit(event) {
   event.preventDefault();
 
   const question = chatInput.value.trim();
+
   if (!question || lastScore === null || !lastUserData) return;
 
   appendChatMessage(question, "user");
+
   chatInput.value = "";
+
   setChatLoadingState(true);
 
   const botBubble = appendChatMessage("", "bot");
@@ -357,6 +410,7 @@ async function handleChatSubmit(event) {
     await streamChatReply(question, botBubble);
   } catch (err) {
     botBubble.remove();
+
     appendChatMessage(
       "Unable to reach MindWell chat. Please make sure the prediction server is running.",
       "error"
@@ -369,7 +423,9 @@ async function handleChatSubmit(event) {
 async function streamChatReply(question, botBubble) {
   const response = await fetch(CHAT_API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
       messages: question,
       mental_health_score: lastScore,
@@ -384,26 +440,40 @@ async function streamChatReply(question, botBubble) {
 
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
+
   let text = "";
 
   while (true) {
     const { done, value } = await reader.read();
+
     if (done) break;
 
-    text += decoder.decode(value, { stream: true });
-    botBubble.textContent = text;
+    text += decoder.decode(value, {
+      stream: true
+    });
+
+    // Remove Markdown bold markers.
+    botBubble.textContent = text.replace(/\*\*/g, "");
+
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  if (!text) botBubble.textContent = "I don't have a response for that right now.";
+  if (!text) {
+    botBubble.textContent =
+      "I don't have a response for that right now.";
+  }
 }
 
 function appendChatMessage(text, role) {
   const bubble = document.createElement("div");
+
   bubble.className = `chat-msg chat-msg--${role}`;
   bubble.textContent = text;
+
   chatMessages.appendChild(bubble);
+
   chatMessages.scrollTop = chatMessages.scrollHeight;
+
   return bubble;
 }
 

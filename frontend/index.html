@@ -8,7 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Permanent+Marker&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 </head>
@@ -69,9 +69,53 @@
         </g>
         <circle class="graph-live-dot" r="4"></circle>
       </svg>
+
+      <svg class="hero__flora" viewBox="0 0 180 110" aria-hidden="true">
+        <path class="flora-grass" d="M6 108 C 4 96, 10 88, 8 78"></path>
+        <path class="flora-grass" d="M18 108 C 20 94, 14 86, 18 74"></path>
+        <path class="flora-grass" d="M158 108 C 160 96, 154 88, 158 78"></path>
+        <path class="flora-grass" d="M170 108 C 168 94, 174 86, 170 74"></path>
+
+        <g class="flora-plant flora-plant--1">
+          <path class="flora-stem" d="M30 108 C 28 88, 32 68, 30 52"></path>
+          <path class="flora-leaf" d="M30 78 C 18 75, 13 66, 18 60 C 26 63, 30 70, 30 78 Z"></path>
+          <g class="flora-bloom flora-bloom--small" transform="translate(30 46)">
+            <circle class="petal petal--blue" r="4.5" cy="-5.5" transform="rotate(0)"></circle>
+            <circle class="petal petal--blue" r="4.5" cy="-5.5" transform="rotate(90)"></circle>
+            <circle class="petal petal--blue" r="4.5" cy="-5.5" transform="rotate(180)"></circle>
+            <circle class="petal petal--blue" r="4.5" cy="-5.5" transform="rotate(270)"></circle>
+            <circle class="petal-center" r="2.6"></circle>
+          </g>
+        </g>
+
+        <g class="flora-plant flora-plant--2">
+          <path class="flora-stem" d="M85 108 C 82 80, 88 55, 85 30"></path>
+          <path class="flora-leaf" d="M85 70 C 70 66, 64 54, 70 46 C 80 50, 85 60, 85 70 Z"></path>
+          <path class="flora-leaf" d="M85 55 C 100 50, 106 38, 100 30 C 90 34, 85 44, 85 55 Z"></path>
+          <g class="flora-bloom" transform="translate(85 26)">
+            <circle class="petal petal--pink" r="7.5" cy="-9.5" transform="rotate(0)"></circle>
+            <circle class="petal petal--pink" r="7.5" cy="-9.5" transform="rotate(72)"></circle>
+            <circle class="petal petal--pink" r="7.5" cy="-9.5" transform="rotate(144)"></circle>
+            <circle class="petal petal--pink" r="7.5" cy="-9.5" transform="rotate(216)"></circle>
+            <circle class="petal petal--pink" r="7.5" cy="-9.5" transform="rotate(288)"></circle>
+            <circle class="petal-center" r="4.4"></circle>
+          </g>
+        </g>
+
+        <g class="flora-plant flora-plant--3">
+          <path class="flora-stem" d="M140 108 C 138 90, 142 72, 140 58"></path>
+          <path class="flora-leaf" d="M140 82 C 128 80, 123 72, 128 66 C 136 68, 140 75, 140 82 Z"></path>
+          <g class="flora-bloom" transform="translate(140 52)">
+            <circle class="petal petal--coral" r="6" cy="-7.5" transform="rotate(0)"></circle>
+            <circle class="petal petal--coral" r="6" cy="-7.5" transform="rotate(72)"></circle>
+            <circle class="petal petal--coral" r="6" cy="-7.5" transform="rotate(144)"></circle>
+            <circle class="petal petal--coral" r="6" cy="-7.5" transform="rotate(216)"></circle>
+            <circle class="petal petal--coral" r="6" cy="-7.5" transform="rotate(288)"></circle>
+            <circle class="petal-center" r="3.4"></circle>
+          </g>
+        </g>
+      </svg>
       <div class="hero__stat">
-        <span class="hero__stat-value">6.4</span>
-        <span class="hero__stat-label">sample predicted score</span>
       </div>
     </div>
   </section>
@@ -114,7 +158,7 @@
           </div>
 
           <div class="field">
-            <label for="academic-level">Academic level</label>
+            <label for="academic-level">Academic Level</label>
             <select id="academic-level" name="Academic_Level" required>
               <option value="" disabled selected>Select</option>
               <option value="High School">High School</option>
@@ -132,7 +176,7 @@
         <div class="form__row">
 
           <div class="field">
-            <label for="platform">Most used platform</label>
+            <label for="platform">Most Used Platform</label>
             <select id="platform" name="Most_Used_Platform" required>
               <option value="" disabled selected>Select</option>
               <option value="Instagram">Instagram</option>
@@ -152,7 +196,7 @@
           </div>
 
           <div class="field">
-            <label for="purpose">Purpose of use</label>
+            <label for="purpose">Purpose Of Use</label>
             <select id="purpose" name="Purpose_Of_Use" required>
               <option value="" disabled selected>Select</option>
               <option value="Entertainment">Entertainment</option>
@@ -164,13 +208,13 @@
           </div>
 
           <div class="field">
-            <label for="usage-hours">Avg. daily usage (hours)</label>
+            <label for="usage-hours">Avg. Daily Screen Time (hours)</label>
             <input type="number" id="usage-hours" name="Avg_Daily_Usage_Hours" min="1" max="24" step="0.1" required>
             <span class="field__error" data-error-for="usage-hours"></span>
           </div>
 
           <div class="field">
-            <label for="unlocks">Daily unlocks</label>
+            <label for="unlocks">Daily Phone Unlocks</label>
             <input type="number" id="unlocks" name="Daily_Unlocks" min="1" step="1" required>
             <span class="field__hint">How many times you unlock your phone per day</span>
             <span class="field__error" data-error-for="unlocks"></span>
@@ -184,25 +228,25 @@
         <div class="form__row">
 
           <div class="field">
-            <label for="study-hours">Study hours per day</label>
+            <label for="study-hours">Study Hours (hours/day)</label>
             <input type="number" id="study-hours" name="Study_Hours" min="0" max="24" step="0.1" required>
             <span class="field__error" data-error-for="study-hours"></span>
           </div>
 
           <div class="field">
-            <label for="activity-hours">Physical activity (hours/day)</label>
+            <label for="activity-hours">Physical Activity (hours/day)</label>
             <input type="number" id="activity-hours" name="Physical_Activity_Hours" min="0" max="10" step="0.1" required>
             <span class="field__error" data-error-for="activity-hours"></span>
           </div>
 
           <div class="field">
-            <label for="sleep-hours">Sleep per night (hours)</label>
+            <label for="sleep-hours">Sleep Per Night (hours)</label>
             <input type="number" id="sleep-hours" name="Sleep_Hours_Per_Night" min="0" max="24" step="0.1" required>
             <span class="field__error" data-error-for="sleep-hours"></span>
           </div>
 
           <div class="field">
-            <label for="stress">Stress level</label>
+            <label for="stress">Stress Level</label>
             <select id="stress" name="Stress_Level" required>
               <option value="" disabled selected>Select</option>
               <option value="Low">Low</option>
@@ -304,9 +348,9 @@
 <div class="chat-widget">
   <div class="chat-hint" id="chat-hint" aria-hidden="true">
     <span class="chat-hint__label">ask me anything</span>
-    <svg class="chat-hint__arrow" viewBox="0 0 40 40">
-      <path d="M4 4 C 4 24, 20 30, 32 33" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      <path d="M25 29 L32 33 L29 39" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg class="chat-hint__arrow" viewBox="0 0 50 64">
+      <path class="hint-arrow-curve" d="M6 6 C 8 30, 26 42, 42 46" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      <path class="hint-arrow-head" d="M30 40 L42 46 L38 58" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
 

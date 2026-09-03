@@ -268,16 +268,11 @@ def generate_guidance(state: ChatState):
     ]
 
     # Generate final response
-    response = llm.stream(prompt)
-    full_response = ""
-
-    # Return final state update
-    for chunk in response:
-        full_response += chunk.content
+    response = llm.invoke(prompt)
 
     return {
-        "response": full_response,
-        "messages": [AIMessage(content=full_response)]
+        "response": response.content,
+        "messages": [AIMessage(content=response.content)]
     }
 
 # Define graph
