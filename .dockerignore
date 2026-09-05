@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+
+.git/
+.github/
+
+.env
+
+notebook/
+plots/
+dataset/
+
+frontend/
+
+README.md
