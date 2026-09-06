@@ -1,0 +1,19 @@
+services:
+
+  backend:
+    build: .
+    image: mindwell-backend:latest
+    container_name: mindwell-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+
+  frontend:
+    build: ./frontend
+    image: mindwell-frontend:latest
+    container_name: mindwell-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
