@@ -2,7 +2,7 @@
    MindWell — frontend logic
    ========================================================================== */
 
-const API_URL = "http://127.0.0.1:8000/predict";
+const API_URL = "http://51.20.53.250:8000/predict";
 
 // Countries accepted by the backend (Literal values from the FastAPI model),
 // sorted alphabetically with "Other" pinned last.
