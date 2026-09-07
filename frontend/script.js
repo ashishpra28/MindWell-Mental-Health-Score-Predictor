@@ -2,8 +2,8 @@
    MindWell — frontend logic
    ========================================================================== */
 
-const API_URL = "https://mindwell-mental-health-score-predictor.onrender.com/";
-const CHAT_API_URL = "https://mindwell-frontend-nc5b.onrender.com/";
+const API_URL = "https://mindwell-mental-health-score-predictor.onrender.com/predict";
+const CHAT_API_URL = "https://mindwell-mental-health-score-predictor.onrender.com/chat";
 
 // Countries accepted by the backend (Literal values from the FastAPI model),
 // sorted alphabetically with "Other" pinned last.
